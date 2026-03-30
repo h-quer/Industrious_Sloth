@@ -1,0 +1,98 @@
+<h1 align="center">
+  <img src="/public/favicon.png" width="auto" height="48"/>
+  <br>
+  Industrious Sloth</h1>
+<p align="center">The Kanban-style task manager</p>
+
+---
+
+## What is the Industrious Sloth about?
+The sloth is lazy, but also industrious. It wants to get tasks done, but with as little effort as possible.
+
+It is heavily inspired by Vikunja and Tasks.md (the self-hosted service, not the hosted app).
+
+### Why not simply use Tasks.md instead?
+
+[Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build Industrious Sloth:
+* It can handle multiple boards, but there are no options to navigate them conveniently within the UI.
+* Due dates can be set, but there is no timeline view and no way to check due tasks.
+* Metadata is simply written as part of the markdown file, I prefer to handle it in text form within the file, but as YAML Front Matter block.
+
+### Why not simply use Vikunja instead?
+
+Honestly, you should probably use [Vikunja](https://github.com/go-vikunja/vikunja). It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
+* Vikunja uses a database backend to store tasks. Which works very well, I just like having them as markdown files on disk. You can point Obsidian at them, sync them to Github, or think of any other workflow I can't even imagine. Plain text files are awesome and I like the flexibility they offer.
+* The Vikunja dev brings his political opinions into his software. It's "just" seasonal icons and (implemented after community backlash) there is an option to disable it, but it still puts me off the app. Even if I agree with the cause, it's a tasks app and I don't want it to be political at all. I want it to manage my tasks, nothing else.
+* Vikunja does much, much more than the Industrious Sloth. The sloth is lazy compared to the alpaca. Being able to do more can be good, but I wanted to cut down the excess and have a simpler, more streamlined tool that fits my use case better.
+
+## It's an early release and was designed primarily with AI, will it keep my data safe?
+Yes, absolutely!
+
+I did primarily use the Gemini AI to create this. It is "just" a kind-of fancy UI on top of regular files and folders, though.
+All data is kept as simple directories and markdown files on the file system. No database, no arbitrary abstraction, just plain text files.
+Make sure they are part of your backup solution and everything is perfectly safe.
+
+## Screenshots
+coming up
+
+## Setup and installation
+
+### Docker setup
+
+You can simply use the following docker-compose.yml to spin up the Industrious Sloth. Make sure to create the volumes as needed.
+
+```yaml
+---
+services:
+  industrious_sloth:
+    image: ghcr.io/h-quer/industrious_sloth:latest
+    container_name: industrious_sloth
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - UID=1000
+      - GID=1000
+    volumes:
+      - /your_sloth_dir/data:/app/data       # adjust path
+    ports:
+      - 8428:3000                            # remove if using reverse proxy and accessing via container name
+```
+Once it's set, simply pull and start the image:
+```
+docker compose up -d
+```
+
+The Industrious Sloth should now be watching your specified port (3000 by default).
+
+### Directories and the config file
+
+All data is stored in the data directory. Make sure that it exists and is readable / writable from within the container using the UID and GID set with the environment variable.
+
+### Security
+
+The Industrious Sloth does not offer logins or any kind of security measures. This should be fine if only using it locally or behind a VPN, but even then you might want to put it behind an auth provider. Something like Caddy basic auth is advisable, or a more full-featured solution like Authentik.
+If you want to expose this to the Internet, you should definitely put it behind a proper auth solution.
+The Industrious Sloth does not and will not provide auth functionality, for the simple reason that I trust neither myself nor some AI to design a really safe one. Leave it to the professionaly, use an existing and tested auth solution.
+
+## Scope and roadmap
+### Continuous support
+
+The Industrious Sloth manages my tasks and I use it daily. I will continue to support it since I want to continue using it. That being said, it's build primarily with my use case in mind.
+I'm more than happy to expand it to cover additional use cases if they fit the overall theme, but I don't want to over-complicate it.
+The Industrious Sloth is intentionally lean and will stay that way.
+
+### Not in scope
+
+The Industrious Sloth will not include:
+* Auth functionality or any team/sharing features
+* Any sort of database backend, using simple markdown files is the point
+
+### Improvements I hope to implement (eventually)
+
+* I'm not perfectly happy with the markdown editor yet, I hope to improve it generally
+* Attachments / images are not possible right now, I'd like to add that functionality, but I'm not sure how to best handle their storage yet
+
+## How to contribute
+Bug reports are always useful (if you run into bugs, which of course I hope won't happen ...).
+I'm also happy to get feature requests as long as they fit with the overall theme of the Industrious Sloth and don't break the very intentional simplicity of it.
