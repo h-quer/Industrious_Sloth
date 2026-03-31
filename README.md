@@ -1,7 +1,8 @@
 <h1 align="center">
   <img src="/public/favicon.png" width="auto" height="48"/>
   <br>
-  Industrious Sloth</h1>
+  Industrious Sloth
+</h1>
 <p align="center">The Kanban-style task manager</p>
 
 ---
@@ -9,11 +10,14 @@
 ## What is the Industrious Sloth about?
 The sloth is lazy, but also industrious. It wants to get tasks done, but with as little effort as possible.
 
+Essentially it's a UI to manage markdown files. Tasks are stored in a single markdown file with a YAML Front Matter metadata header. Folder structure determines boards and lanes.
+You can point Obsidian at them, sync them to Github, or think of any other workflow I can't even imagine. Plain text files are awesome and I like the flexibility they offer.
+
 It is heavily inspired by Vikunja and Tasks.md (the self-hosted service, not the hosted app).
 
 ### Why not simply use Tasks.md instead?
 
-[Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build Industrious Sloth:
+[Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build the Industrious Sloth:
 * It can handle multiple boards, but there are no options to navigate them conveniently within the UI.
 * Due dates can be set, but there is no timeline view and no way to check due tasks.
 * Metadata is simply written as part of the markdown file, I prefer to handle it in text form within the file, but as YAML Front Matter block.
@@ -21,16 +25,16 @@ It is heavily inspired by Vikunja and Tasks.md (the self-hosted service, not the
 ### Why not simply use Vikunja instead?
 
 Honestly, you should probably use [Vikunja](https://github.com/go-vikunja/vikunja). It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
-* Vikunja uses a database backend to store tasks. Which works very well, I just like having them as markdown files on disk. You can point Obsidian at them, sync them to Github, or think of any other workflow I can't even imagine. Plain text files are awesome and I like the flexibility they offer.
-* The Vikunja dev brings his political opinions into his software. It's "just" seasonal icons and (implemented after community backlash) there is an option to disable it, but it still puts me off the app. Even if I agree with the cause, it's a tasks app and I don't want it to be political at all. I want it to manage my tasks, nothing else.
-* Vikunja does much, much more than the Industrious Sloth. The sloth is lazy compared to the alpaca. Being able to do more can be good, but I wanted to cut down the excess and have a simpler, more streamlined tool that fits my use case better.
+* Vikunja uses a database backend to store tasks. Which works very well, I just prefer having them as markdown files on disk.
+* The Vikunja dev brings his political opinions into his software. It's "just" icon changes to support causes he likes and there is an option to disable it (implemented after community backlash), but it still puts me off the app. Even if I agree with the cause, I don't want my task app to be political. I want it to manage my tasks, nothing else. The Industrious Sloth is strictly neutral and only wants to manage tasks, it will never try to push any political or social opinions.
+* Vikunja does much, much more than the Industrious Sloth. The sloth is lazy compared to the alpaca. Being able to do more can be good, but I wanted to cut down the excess and have a simple, more streamlined tool for a more narrow use case.
 
 ## It's an early release and was designed primarily with AI, will it keep my data safe?
 Yes, absolutely!
 
 I did primarily use the Gemini AI to create this. It is "just" a kind-of fancy UI on top of regular files and folders, though.
 All data is kept as simple directories and markdown files on the file system. No database, no arbitrary abstraction, just plain text files.
-Make sure they are part of your backup solution and everything is perfectly safe.
+You should, of course, have a 3-2-1 backup strategy already and you should make sure that these files are part of it.
 
 ## Screenshots
 coming up
@@ -63,7 +67,11 @@ Once it's set, simply pull and start the image:
 docker compose up -d
 ```
 
-The Industrious Sloth should now be watching your specified port (3000 by default).
+The Industrious Sloth should now be watching your specified port (8428 in the example above).
+
+### Customisation
+
+There is a custom.css file in the data directory. It overrides the default color schemes. Simply uncommend and adjust what you want to change.
 
 ### Directories and the config file
 
@@ -73,7 +81,7 @@ All data is stored in the data directory. Make sure that it exists and is readab
 
 The Industrious Sloth does not offer logins or any kind of security measures. This should be fine if only using it locally or behind a VPN, but even then you might want to put it behind an auth provider. Something like Caddy basic auth is advisable, or a more full-featured solution like Authentik.
 If you want to expose this to the Internet, you should definitely put it behind a proper auth solution.
-The Industrious Sloth does not and will not provide auth functionality, for the simple reason that I trust neither myself nor some AI to design a really safe one. Leave it to the professionaly, use an existing and tested auth solution.
+The Industrious Sloth does not and will not provide auth functionality, for the simple reason that I trust neither myself nor some AI to design a safe one. Leave it to the professionaly, use an existing and tested auth solution.
 
 ## Scope and roadmap
 ### Continuous support
@@ -90,8 +98,10 @@ The Industrious Sloth will not include:
 
 ### Improvements I hope to implement (eventually)
 
-* I'm not perfectly happy with the markdown editor yet, I hope to improve it generally
-* Attachments / images are not possible right now, I'd like to add that functionality, but I'm not sure how to best handle their storage yet
+* I'm not perfectly happy with the markdown editor yet, I hope to improve it generally.
+* Attachments / images are not possible right now, I'd like to add that functionality, but I'm not sure how to best handle their storage yet.
+* I'm thinking about adding multi-user support by using domain paths for each user. It'll add some complexity and the external auth provider might be more complicated to set up, but it should be possible without over-complicating the architecture.
+* The default color scheme might change a bit. It's not a high priority since it's completely customizable using the custom.css file, but I'd like to default colors to look a bit "nicer", without knowing what exactly that means yet.
 
 ## How to contribute
 Bug reports are always useful (if you run into bugs, which of course I hope won't happen ...).
