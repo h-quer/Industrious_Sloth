@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="/public/favicon.png" width="auto" height="48"/>
+  <img src="/public/logo.png" width="auto" height="48"/>
   <br>
   Industrious Sloth
 </h1>
@@ -13,21 +13,27 @@ The sloth is lazy, but also industrious. It wants to get tasks done, but with as
 Essentially it's a UI to manage markdown files. Tasks are stored in a single markdown file with a YAML Front Matter metadata header. Folder structure determines boards and lanes.
 You can point Obsidian at them, sync them to Github, or think of any other workflow I can't even imagine. Plain text files are awesome and I like the flexibility they offer.
 
-It is heavily inspired by Vikunja and Tasks.md (the self-hosted service, not the hosted app).
+It is heavily inspired by [Vikunja](https://github.com/go-vikunja/vikunja) and [Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) (the self-hosted service, not the hosted app).
 
 ### Why not simply use Tasks.md instead?
 
-[Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build the Industrious Sloth:
+Tasks.md is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build the Industrious Sloth:
 * It can handle multiple boards, but there are no options to navigate them conveniently within the UI.
 * Due dates can be set, but there is no timeline view and no way to check due tasks.
 * Metadata is simply written as part of the markdown file, I prefer to handle it in text form within the file, but as YAML Front Matter block.
 
 ### Why not simply use Vikunja instead?
 
-Honestly, you should probably use [Vikunja](https://github.com/go-vikunja/vikunja). It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
+Honestly, you should probably use Vikunja. It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
 * Vikunja uses a database backend to store tasks. Which works very well, I just prefer having them as markdown files on disk.
 * The Vikunja dev brings his political opinions into his software. It's "just" icon changes to support causes he likes and there is an option to disable it (implemented after community backlash), but it still puts me off the app. Even if I agree with the cause, I don't want my task app to be political. I want it to manage my tasks, nothing else. The Industrious Sloth is strictly neutral and only wants to manage tasks, it will never try to push any political or social opinions.
 * Vikunja does much, much more than the Industrious Sloth. The sloth is lazy compared to the alpaca. Being able to do more can be good, but I wanted to cut down the excess and have a simple, more streamlined tool for a more narrow use case.
+
+### What about TaskTrove?
+
+I actually became aware of it only after I started waking up the Industrious Sloth. It stores data as a json file, not quite markdown but a text file directly accessible on the file system. I really like it. If I had known about it early, the sloth might have continued to sleep in the jungle. Still, there are some reasons to keep the sloth awake:
+* I think the interface, especially in Kanban view, of TaskTrove isn't quite as intuitive as the one of Vikunja. Whether the sloth is more intuitive is for you to decie, I tried to make it so.
+* It comes with pricing, subscriptions and pro features. Sure, devs need to make money, but there are also examples of features disappearing behind paywalls. The sloth doesn't care about money, it will always be open source and free (but in turn it's only a hobby/side project so it'll get less support).
 
 ## It's an early release and was designed primarily with AI, will it keep my data safe?
 Yes, absolutely!
@@ -69,8 +75,9 @@ docker compose up -d
 
 The Industrious Sloth should now be watching your specified port (8428 in the example above).
 
-### Customisation
+### What's with the weird color scheme?
 
+The sloth lives in the jungle. It wants familiar colors. If you don't agree with its preferences, you can fully customize the color scheme.
 There is a custom.css file in the data directory. It overrides the default color schemes. Simply uncommend and adjust what you want to change.
 
 ### Directories and the config file
