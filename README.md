@@ -103,8 +103,9 @@ The Industrious Sloth is intentionally lean and will stay that way.
 ### Not in scope
 
 The Industrious Sloth will not include:
-* Auth functionality or any team/sharing features
-* Any sort of database backend, using simple markdown files is the point
+* Auth functionality or any team/sharing features.
+* Any sort of database backend, using simple markdown files is the point.
+* Data export functionality. Everything is stored as simple directories and markdown files in your bind mount. You can simply copy these directories. A dedicated export functionality would be redundant.
 
 ### Improvements I hope to implement (eventually)
 
