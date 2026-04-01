@@ -96,9 +96,11 @@ The Industrious Sloth does not and will not provide auth functionality, for the 
 ## Scope and roadmap
 ### Continuous support
 
-The Industrious Sloth manages my tasks and I use it daily. I will continue to support it since I want to continue using it. That being said, it's build primarily with my use case in mind.
+The Industrious Sloth manages my tasks and I use it daily. I will continue to support it since I want to continue using it. That being said, it's build primarily with my use case in mind and it is a hoppy/side project.
+
 I'm more than happy to expand it to cover additional use cases if they fit the overall theme, but I don't want to over-complicate it.
-The Industrious Sloth is intentionally lean and will stay that way.
+
+The Industrious Sloth is intentionally lean and I want it to stay that way.
 
 ### Not in scope
 
@@ -111,6 +113,7 @@ The Industrious Sloth will not include:
 
 * I'm not perfectly happy with the markdown editor yet, I hope to improve it generally.
 * Attachments / images are not possible right now, I'd like to add that functionality, but I'm not sure how to best handle their storage yet.
+* Due dates are exactly that, dates. I'm thinking about whether changing them from date to datetime might be a good idea. It adds some complexity, primarily in the UI, but the functionality might be worth it.
 * I'm thinking about adding multi-user support by using domain paths for each user. It'll add some complexity and the external auth provider might be more complicated to set up, but it should be possible without over-complicating the architecture.
 * The default color scheme might change a bit. It's not a high priority since it's completely customizable using the custom.css file, but I'd like to default colors to look a bit "nicer", without knowing what exactly that means yet.
 
