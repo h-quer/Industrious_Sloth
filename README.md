@@ -43,7 +43,10 @@ All data is kept as simple directories and markdown files on the file system. No
 You should, of course, have a 3-2-1 backup strategy already and you should make sure that these files are part of it.
 
 ## Screenshots
-coming up
+<p align="center">
+  <img src="/images/light.png" alt="boards_light" width="48%"/>
+  <img src="/images/dark.png" alt="boards_dark" width="48%"/>
+</p>
 
 ## Setup and installation
 
