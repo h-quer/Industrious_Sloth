@@ -110,11 +110,11 @@ The Industrious Sloth is intentionally lean and I want it to stay that way.
 
 ### Improvements I hope to implement (eventually)
 
+* Lots of tiny usability improvements that will probably pop up over time.
 * I'm not perfectly happy with the markdown editor yet, I hope to improve it generally.
 * Attachments / images are not possible right now, I'd like to add that functionality, but I'm not sure how to best handle their storage yet.
 * Due dates are exactly that, dates. I'm thinking about whether changing them from date to datetime might be a good idea. It adds some complexity, primarily in the UI, but the functionality might be worth it.
 * I'm thinking about adding multi-user support by using domain paths for each user. It'll add some complexity and the external auth provider might be more complicated to set up, but it should be possible without over-complicating the architecture.
-* The default color scheme might change a bit. It's not a high priority since it's completely customizable using the custom.css file, but I'd like to default colors to look a bit "nicer", without knowing what exactly that means yet.
 
 ## How to contribute
 Bug reports are always useful (if you run into bugs, which of course I hope won't happen ...).
