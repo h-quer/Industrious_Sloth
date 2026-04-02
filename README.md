@@ -39,7 +39,7 @@ I actually became aware of it only after I started waking up the Industrious Slo
 Yes, absolutely!
 
 I did primarily use the Gemini AI to create this. It is "just" a kind-of fancy UI on top of regular files and folders, though.
-All data is kept as simple directories and markdown files on the file system. No database, no arbitrary abstraction, just plain text files.
+All data are kept as simple directories and markdown files on the file system. No database, no arbitrary abstraction, just plain text files.
 You should, of course, have a 3-2-1 backup strategy already and you should make sure that these files are part of it.
 
 ## Screenshots
