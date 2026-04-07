@@ -17,26 +17,26 @@ It is heavily inspired by [Vikunja](https://github.com/go-vikunja/vikunja) and [
 
 ### Why not simply use Tasks.md instead?
 
-Tasks.md is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build the Industrious Sloth:
+[Tasks.md](https://github.com/BaldissaraMatheus/Tasks.md) is an amazing tool. I love the simple structure, the markdown editor, and the fact that it saves tasks as simple markdown files. In fact I got the idea from there. There are three reasons, however, for me to build the Industrious Sloth:
 * It can handle multiple boards, but there are no options to navigate them conveniently within the UI.
 * Due dates can be set, but there is no timeline view and no way to check due tasks.
 * Metadata is simply written as part of the markdown file, I prefer to handle it in text form within the file, but as YAML Front Matter block.
 
 ### Why not simply use Vikunja instead?
 
-Honestly, you should probably use Vikunja. It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
+Honestly, you should probably use [Vikunja](https://github.com/go-vikunja/vikunja). It's an amazing tool and much more mature than the Industrious Sloth. It covers pretty much all use cases the Sloth woke up for as well. There are a few reasons why I built the Industrious Sloth anyway:
 * Vikunja uses a database backend to store tasks. Which works very well, I just prefer having them as markdown files on disk.
 * The Vikunja dev brings his political opinions into his software. It's "just" icon changes to support causes he likes and there is an option to disable it (implemented after community backlash), but it still puts me off the app. Even if I agree with the cause, I don't want my task app to be political. I want it to manage my tasks, nothing else. The Industrious Sloth is strictly neutral and only wants to manage tasks, it will never try to push any political or social opinions.
 * Vikunja does much, much more than the Industrious Sloth. The sloth is lazy compared to the alpaca. Being able to do more can be good, but I wanted to cut down the excess and have a simple, more streamlined tool for a more narrow use case.
 
 ### What about TaskTrove?
 
-I actually became aware of it only after I started waking up the Industrious Sloth. It stores data as a json file, not quite markdown but a text file directly accessible on the file system. I really like it. If I had known about it early, the sloth might have continued to sleep in the jungle. Still, there are some reasons to keep the sloth awake:
+I actually became aware of [TaskTrove](https://github.com/dohsimpson/TaskTrove) only after I started waking up the Industrious Sloth. It stores data as a json file, not quite markdown but a text file directly accessible on the file system. I really like it. If I had known about it early, the sloth might have continued to sleep in the jungle. Still, there are some reasons to keep the sloth awake:
 * I think the interface, especially in Kanban view, of TaskTrove isn't quite as intuitive as the one of Vikunja. Whether the sloth is more intuitive is for you to decie, I tried to make it so.
 * It comes with pricing, subscriptions and pro features. Sure, devs need to make money, but there are also examples of features disappearing behind paywalls. The sloth doesn't care about money, it will always be open source and free (but in turn it's only a hobby/side project so it'll get less support).
 
-### jotty pages?
-[jotty](https://github.com/fccview/jotty) is really awesome as well. It does markdown notes (very similar to flatnotes) and markdown tasks. Almost perfect! However, its task boards don't quite work like they do with e.g. Vikunja:
+### jotty page maybe?
+[jotty page](https://github.com/fccview/jotty) is really awesome as well. It does markdown notes (very similar to flatnotes) and markdown tasks. Almost perfect! However, its task boards don't quite work like they do with e.g. Vikunja:
 * Boards are very focussed on the todo / doing / done style, which I guess matches project management and the original Kanban idea more properly than the sloth. The sloth is lazy and uses the Kanban style pretty much like a two dimensional task list, not nessesarily like a true project board. It can use project management lanes, but doesn't have to. Using jotty this way is less convenient.
 * No due dates and timeline view, which are essential for me.
 
