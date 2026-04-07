@@ -35,6 +35,11 @@ I actually became aware of it only after I started waking up the Industrious Slo
 * I think the interface, especially in Kanban view, of TaskTrove isn't quite as intuitive as the one of Vikunja. Whether the sloth is more intuitive is for you to decie, I tried to make it so.
 * It comes with pricing, subscriptions and pro features. Sure, devs need to make money, but there are also examples of features disappearing behind paywalls. The sloth doesn't care about money, it will always be open source and free (but in turn it's only a hobby/side project so it'll get less support).
 
+### jotty pages?
+[jotty](https://github.com/fccview/jotty) is really awesome as well. It does markdown notes (very similar to flatnotes) and markdown tasks. Almost perfect! However, its task boards don't quite work like they do with e.g. Vikunja:
+* Boards are very focussed on the todo / doing / done style, which I guess matches project management and the original Kanban idea more properly than the sloth. The sloth is lazy and uses the Kanban style pretty much like a two dimensional task list, not nessesarily like a true project board. It can use project management lanes, but doesn't have to. Using jotty this way is less convenient.
+* No due dates and timeline view, which are essential for me.
+
 ## It's an early release and was designed primarily with AI, will it keep my data safe?
 Yes, absolutely!
 
