@@ -1,16 +1,15 @@
 ---
 services:
   industrious_sloth:
-    build: .
+    image: ghcr.io/h-quer/industrious_sloth:latest
     container_name: industrious_sloth
-    ports:
-      - "9300:3000"
-    volumes:
-      - ./data:/app/data
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - PORT=3000
       - UID=1000
       - GID=1000
-    restart: unless-stopped
-    
+    volumes:
+      - /your_sloth_dir/data:/app/data       # adjust path
+    ports:
+      - 8428:3000                            # remove if using reverse proxy and accessing via container name
