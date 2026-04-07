@@ -1,0 +1,50 @@
+/* 
+  Custom CSS Overrides
+  Use this file to customize the look and feel of your application.
+  Any styles defined here will override the default theme.
+  The file is served from /data/custom.css and loaded in index.html.
+*/
+
+/* 
+:root {
+  --color-clouded-night: #0c0a09;
+  --color-jungle-dark: #022c22;
+  --color-jungle-mist: #fafaf9;
+  --color-jungle-paper: #ffffff;
+}
+
+.dark {
+  --color-clouded-night: #0c0a09;
+  --color-jungle-dark: #022c22;
+  --color-jungle-mist: #fafaf9;
+  --color-jungle-paper: #ffffff;
+}
+
+body {
+  background-color: var(--color-jungle-mist);
+  color: #1c1917;
+}
+
+.dark body {
+  background-color: var(--color-clouded-night);
+  color: #f5f5f4;
+}
+
+/* Sidebar Overrides */
+/*
+.bg-stone-100 { background-color: #f5f5f4 !important; }
+.dark .bg-stone-900 { background-color: #1c1917 !important; }
+*/
+
+/* Board Header Overrides */
+/*
+.bg-jungle-paper { background-color: #ffffff !important; }
+.dark .bg-stone-900 { background-color: #1c1917 !important; }
+*/
+
+/* Example: Change the primary emerald color to something else */
+/*
+.text-emerald-900 { color: #1e3a8a !important; } 
+.bg-emerald-700 { background-color: #1d4ed8 !important; }
+*/
+*/

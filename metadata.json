@@ -1,0 +1,5 @@
+{
+  "name": "Industrious Sloth",
+  "description": "A filesystem-based Kanban and task management application with YAML front matter support and markdown editing.",
+  "requestFramePermissions": []
+}

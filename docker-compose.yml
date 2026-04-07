@@ -1,0 +1,16 @@
+---
+services:
+  industrious_sloth:
+    build: .
+    container_name: industrious_sloth
+    ports:
+      - "9300:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - UID=1000
+      - GID=1000
+    restart: unless-stopped
+    

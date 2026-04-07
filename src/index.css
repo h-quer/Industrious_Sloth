@@ -1,0 +1,307 @@
+@import "highlight.js/styles/github.css";
+@import "highlight.js/styles/github-dark.css" (prefers-color-scheme: dark);
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Base Colors */
+  --color-jungle-mist: #fafaf9; /* stone-50 */
+  --color-clouded-night: #0c0a09; /* stone-950 */
+  
+  /* Sidebar Palette */
+  --color-jungle-sidebar: #f5f5f4; /* stone-100 */
+  --color-jungle-sidebar-dark: #1c1917; /* stone-900 */
+  --color-jungle-sidebar-header: #d1fae5; /* emerald-100 */
+  --color-jungle-sidebar-header-dark: #022c22; /* emerald-950 */
+  --color-jungle-sidebar-active: #e7e5e4; /* stone-200 */
+  --color-jungle-sidebar-active-dark: #292524; /* stone-800 */
+  
+  /* View Headers Palette */
+  --color-jungle-view-header: #ecfdf5; /* emerald-50 */
+  --color-jungle-view-header-dark: #043d30;
+  
+  /* Paper & Surfaces */
+  --color-jungle-paper: #ffffff;
+  --color-jungle-paper-dark: #1c1917; /* stone-900 */
+  
+  /* Borders */
+  --color-jungle-border: #e7e5e4; /* stone-200 */
+  --color-jungle-border-dark: #292524; /* stone-800 */
+  
+  /* Text Palette */
+  --color-jungle-text: #1c1917; /* stone-900 */
+  --color-jungle-text-light: #f5f5f4; /* stone-100 */
+  --color-jungle-text-muted: #57534e; /* stone-600 */
+  --color-jungle-text-muted-dark: #a8a29e; /* stone-400 */
+  
+  /* Accents */
+  --color-jungle-emerald: #047857; /* emerald-700 */
+  --color-jungle-emerald-dark: #10b981; /* emerald-500 */
+  --color-jungle-amber: #d97706; /* amber-600 */
+  --color-jungle-amber-dark: #d97706; /* amber-600 - consistent shade */
+  --color-jungle-amber-muted: #fffbeb; /* amber-50 */
+  --color-jungle-amber-muted-dark: rgba(217, 119, 6, 0.2); /* amber-600/20 for consistency */
+
+  /* Force dark mode to use the .dark class */
+  --dark-mode: class;
+}
+
+@utility prose-jungle {
+  @apply prose prose-stone dark:prose-invert prose-emerald;
+  --tw-prose-headings: var(--color-jungle-emerald);
+  --tw-prose-body: var(--color-jungle-text);
+  --tw-prose-links: var(--color-jungle-emerald);
+  --tw-prose-bold: var(--color-jungle-text);
+  --tw-prose-counters: var(--color-jungle-emerald);
+  --tw-prose-bullets: var(--color-jungle-emerald);
+  --tw-prose-hr: var(--color-jungle-border);
+  --tw-prose-quotes: var(--color-jungle-text-muted);
+  --tw-prose-quote-borders: var(--color-jungle-emerald);
+  --tw-prose-captions: var(--color-jungle-text-muted);
+  --tw-prose-code: var(--color-jungle-emerald);
+  --tw-prose-pre-code: var(--color-jungle-text-light);
+  --tw-prose-pre-bg: var(--color-jungle-sidebar-dark);
+  --tw-prose-th-borders: var(--color-jungle-border);
+  --tw-prose-td-borders: var(--color-jungle-border);
+}
+
+/* Sample Entries (Commented Out)
+:root {
+  --color-jungle-mist: #fafaf9;
+  --color-clouded-night: #0c0a09;
+  --color-jungle-sidebar: #f5f5f4;
+  --color-jungle-sidebar-dark: #1c1917;
+  --color-jungle-sidebar-header: #d1fae5;
+  --color-jungle-sidebar-header-dark: #022c22;
+  --color-jungle-sidebar-active: #e7e5e4;
+  --color-jungle-sidebar-active-dark: #292524;
+  --color-jungle-view-header: #ecfdf5;
+  --color-jungle-view-header-dark: #043d30;
+  --color-jungle-paper: #ffffff;
+  --color-jungle-paper-dark: #1c1917;
+  --color-jungle-border: #e7e5e4;
+  --color-jungle-border-dark: #292524;
+  --color-jungle-text: #1c1917;
+  --color-jungle-text-light: #f5f5f4;
+  --color-jungle-text-muted: #57534e;
+  --color-jungle-text-muted-dark: #a8a29e;
+  --color-jungle-emerald: #047857;
+  --color-jungle-emerald-dark: #10b981;
+  --color-jungle-amber: #d97706;
+  --color-jungle-amber-dark: #b45309;
+}
+*/
+
+/* Custom Dark Mode Variant for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+body {
+  background-color: var(--color-jungle-mist);
+  color: var(--color-jungle-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: var(--color-clouded-night);
+  color: var(--color-jungle-text-light);
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d6d3d1; /* stone-300 */
+  border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #44403c; /* stone-700 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a29e; /* stone-400 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #57534e; /* stone-600 */
+}
+
+/* React Datepicker Light Mode Overrides */
+.react-datepicker {
+  background-color: var(--color-jungle-paper) !important;
+  border-color: #e5e7eb !important; /* gray-200 */
+}
+
+.react-datepicker__header {
+  background-color: #f0fdf4 !important; /* emerald-50 */
+  border-bottom-color: #e5e7eb !important;
+}
+
+/* React Datepicker Dark Mode Overrides */
+.dark .react-datepicker {
+  background-color: #1c1917 !important; /* stone-900 */
+  color: #f5f5f4 !important;
+  border-color: #44403c !important;
+}
+
+.dark .react-datepicker__header {
+  background-color: #292524 !important; /* stone-800 */
+  border-bottom-color: #44403c !important;
+}
+
+.dark .react-datepicker__current-month,
+.dark .react-datepicker-time__header,
+.dark .react-datepicker-year-header,
+.dark .react-datepicker__day-name {
+  color: #f5f5f4 !important;
+}
+
+.dark .react-datepicker__day {
+  color: #f5f5f4 !important;
+}
+
+.dark .react-datepicker__day:hover {
+  background-color: #44403c !important;
+}
+
+.dark .react-datepicker__day--selected {
+  background-color: #059669 !important; /* emerald-600 */
+  color: white !important;
+}
+
+.dark .react-datepicker__day--keyboard-selected {
+  background-color: #065f46 !important; /* emerald-800 */
+}
+
+/* Table Styles */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.prose th, .prose td {
+  border: 1px solid #e5e7eb; /* gray-200 */
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.dark .prose th, .dark .prose td {
+  border-color: #374151; /* gray-700 */
+}
+
+.prose th {
+  background-color: #f9fafb; /* gray-50 */
+  font-weight: 600;
+}
+
+.dark .prose th {
+  background-color: #1f2937; /* gray-800 */
+}
+
+/* Highlight.js and Tailwind Typography Overrides */
+.prose pre {
+  background-color: #f6f8fa !important; /* GitHub light background */
+  color: #24292e !important; /* GitHub light text */
+  border: 1px solid #d0d7de;
+}
+
+.dark .prose pre {
+  background-color: #0d1117 !important; /* GitHub dark background */
+  color: #c9d1d9 !important; /* GitHub dark text */
+  border: 1px solid #30363d;
+}
+
+.prose pre code.hljs {
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+.dark .hljs {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.dark .hljs-keyword, .dark .hljs-selector-tag, .dark .hljs-title, .dark .hljs-section, .dark .hljs-doctag, .dark .hljs-name, .dark .hljs-strong {
+  color: #79c0ff !important;
+}
+
+.dark .hljs-string, .dark .hljs-title, .dark .hljs-section, .dark .hljs-bullet, .dark .hljs-symbol, .dark .hljs-addition, .dark .hljs-variable, .dark .hljs-template-tag, .dark .hljs-template-variable {
+  color: #a5d6ff !important;
+}
+
+.dark .hljs-comment, .dark .hljs-quote, .dark .hljs-deletion, .dark .hljs-meta {
+  color: #8b949e !important;
+}
+
+/* PrismJS Dark Mode Overrides */
+.dark .prism-code,
+.dark code[class*="language-"],
+.dark pre[class*="language-"] {
+  color: #e7e5e4 !important; /* stone-200 */
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+.dark .token.comment,
+.dark .token.prolog,
+.dark .token.doctype,
+.dark .token.cdata {
+  color: #78716c !important; /* stone-500 */
+}
+
+.dark .token.punctuation {
+  color: #a8a29e !important; /* stone-400 */
+}
+
+.dark .token.property,
+.dark .token.tag,
+.dark .token.boolean,
+.dark .token.number,
+.dark .token.constant,
+.dark .token.symbol,
+.dark .token.deleted {
+  color: #fbbf24 !important; /* amber-400 */
+}
+
+.dark .token.selector,
+.dark .token.attr-name,
+.dark .token.string,
+.dark .token.char,
+.dark .token.builtin,
+.dark .token.inserted {
+  color: #34d399 !important; /* emerald-400 */
+}
+
+.dark .token.operator,
+.dark .token.entity,
+.dark .token.url,
+.dark .language-css .token.string,
+.dark .style .token.string {
+  color: #d6d3d1 !important;
+}
+
+.dark .token.atrule,
+.dark .token.attr-value,
+.dark .token.keyword {
+  color: #60a5fa !important; /* blue-400 */
+}
+
+.dark .token.function,
+.dark .token.class-name {
+  color: #f472b6 !important; /* pink-400 */
+}
+
+.dark .token.regex,
+.dark .token.important,
+.dark .token.variable {
+  color: #fbbf24 !important; /* amber-400 */
+}
