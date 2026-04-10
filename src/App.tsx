@@ -1035,7 +1035,14 @@ export default function App() {
                   <div className="flex items-center gap-3 text-jungle-text dark:text-jungle-text-light">
                     <Github size={18} className="text-jungle-text-muted dark:text-jungle-text-muted-dark" />
                     <span className="font-bold">Github:</span>
-                    <span className="text-jungle-text-muted italic">(link placeholder)</span>
+                    <a 
+                      href="https://github.com/h-quer/Industrious_Sloth" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-jungle-emerald dark:text-jungle-emerald-dark hover:underline font-medium truncate"
+                    >
+                      h-quer/Industrious_Sloth
+                    </a>
                   </div>
                   
                   <div className="p-4 bg-jungle-paper dark:bg-jungle-paper-dark rounded-2xl border border-jungle-border dark:border-jungle-border-dark">
