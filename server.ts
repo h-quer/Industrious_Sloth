@@ -643,6 +643,22 @@ async function startServer() {
     io.emit("fs-change", { event, path: filePath });
   });
 
+  // Prevent fallback routing for missing images and icons
+  // This stops browsers from receiving index.html when they look for fallback icons like apple-touch-icon.png
+  app.use((req, res, next) => {
+    if (req.path.match(/\.(ico|png|jpg|jpeg|svg|webp|avif|gif)$/i)) {
+      // For static assets, if they made it here in production, they are missing.
+      // In dev, Vite handles existing public files before this logic if possible?
+      // Wait, app.use(express.static) is physically AFTER this in production.
+      // Let's only intercept the common fallback ones explicitly.
+      const isMissingIcon = /apple-touch-icon|favicon|browserconfig|safari-pinned-tab/.test(req.path);
+      if (isMissingIcon && req.path !== '/logo.png') {
+        return res.status(404).end();
+      }
+    }
+    next();
+  });
+
   if (process.env.NODE_ENV !== "production") {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
@@ -653,7 +669,11 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
+    app.get("*", (req, res, next) => {
+      // Prevent returning index.html for unrecognized static files (e.g., .png, .js)
+      if (req.path.includes('.')) {
+        return res.status(404).end();
+      }
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
