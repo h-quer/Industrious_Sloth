@@ -37,6 +37,123 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
   const editorRef = useRef<any>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
+  const handleKeyDown = (e: React.KeyboardEvent<any>) => {
+    const textarea = e.currentTarget as HTMLTextAreaElement;
+    if (!textarea || typeof textarea.selectionStart !== 'number') return;
+    const { selectionStart, selectionEnd, value } = textarea;
+
+    if (e.key === 'Tab') {
+      const beforeCursor = value.substring(0, selectionStart);
+      const startOfLine = beforeCursor.lastIndexOf('\n') + 1;
+      const endOfLine = value.indexOf('\n', selectionStart);
+      const lineContent = value.substring(startOfLine, endOfLine === -1 ? value.length : endOfLine);
+      
+      // Match list markers: unordered (- * +), tasks (- [ ]), or ordered (1. )
+      const listMatch = lineContent.match(/^(\s*)([-*+](\s\[[x ]\])?\s|\d+\.\s)/);
+      
+      if (listMatch) {
+        const prefixLength = listMatch[0].length;
+        // Check if cursor is "behind" (after) the list signifier
+        if (selectionStart >= startOfLine + prefixLength) {
+          e.preventDefault();
+          
+          if (e.shiftKey) {
+            // Outdent: Remove up to 2 spaces from the start of the line
+            if (lineContent.startsWith('  ')) {
+              const newValue = value.substring(0, startOfLine) + lineContent.substring(2) + value.substring(endOfLine === -1 ? value.length : endOfLine);
+              setContent(newValue);
+              setTimeout(() => {
+                const newPos = Math.max(startOfLine + prefixLength - 2, selectionStart - 2);
+                textarea.setSelectionRange(newPos, selectionEnd - 2);
+              }, 0);
+            } else if (lineContent.startsWith(' ')) {
+              const newValue = value.substring(0, startOfLine) + lineContent.substring(1) + value.substring(endOfLine === -1 ? value.length : endOfLine);
+              setContent(newValue);
+              setTimeout(() => {
+                const newPos = Math.max(startOfLine + prefixLength - 1, selectionStart - 1);
+                textarea.setSelectionRange(newPos, selectionEnd - 1);
+              }, 0);
+            }
+          } else {
+            // Indent: Add 2 spaces at the start of the line
+            const newValue = value.substring(0, startOfLine) + '  ' + lineContent + value.substring(endOfLine === -1 ? value.length : endOfLine);
+            setContent(newValue);
+            setTimeout(() => {
+              textarea.setSelectionRange(selectionStart + 2, selectionEnd + 2);
+            }, 0);
+          }
+          return;
+        }
+      }
+    }
+
+    if (e.key === 'Enter') {
+      
+      const beforeCursor = value.substring(0, selectionStart);
+      const lastNewLine = beforeCursor.lastIndexOf('\n');
+      const currentLine = beforeCursor.substring(lastNewLine + 1);
+      
+      // Match list markers: 
+      // 1. Unordered: "- ", "* ", "+ " (including optional task box)
+      // 2. Ordered: "1. ", "2. ", etc.
+      const listMatch = currentLine.match(/^(\s*)([-*+](\s\[[x ]\])?\s|\d+\.\s)/);
+      
+      if (listMatch) {
+        // If current line is ONLY the list marker (plus optional whitespace), 
+        // hitting Enter should remove the marker and end the list.
+        if (currentLine.trim() === listMatch[2].trim()) {
+          e.preventDefault();
+          const newValue = value.substring(0, lastNewLine + 1) + '\n' + value.substring(selectionStart);
+          setContent(newValue);
+          setTimeout(() => {
+            const newPos = lastNewLine + 2;
+            textarea.setSelectionRange(newPos, newPos);
+          }, 0);
+          return;
+        }
+
+        // Continue the list marker
+        e.preventDefault();
+        const indent = listMatch[1];
+        const marker = listMatch[2];
+        
+        let nextMarker = marker;
+        // Simple increment for ordered lists
+        const orderedMatch = marker.match(/^(\d+)\.\s$/);
+        if (orderedMatch) {
+          const nextNum = parseInt(orderedMatch[1], 10) + 1;
+          nextMarker = `${nextNum}. `;
+        } else if (marker.includes('[x]')) {
+          // Reset checked tasks to unchecked
+          nextMarker = marker.replace('[x]', '[ ]');
+        }
+
+        const fullPrefix = indent + nextMarker;
+        const newValue = value.substring(0, selectionStart) + '\n' + fullPrefix + value.substring(selectionStart);
+        setContent(newValue);
+        
+        setTimeout(() => {
+          const newPos = selectionStart + 1 + fullPrefix.length;
+          textarea.setSelectionRange(newPos, newPos);
+        }, 0);
+      } else {
+        // Simple auto-indentation if no list marker but line starts with spaces
+        const indentMatch = currentLine.match(/^(\s+)/);
+        if (indentMatch) {
+          e.preventDefault();
+          const indent = indentMatch[1];
+          const newValue = value.substring(0, selectionStart) + '\n' + indent + value.substring(selectionStart);
+          setContent(newValue);
+          
+          setTimeout(() => {
+            const newPos = selectionStart + 1 + indent.length;
+            textarea.setSelectionRange(newPos, newPos);
+          }, 0);
+        }
+      }
+    }
+  };
+
   const hasChanges = useMemo(() => {
     const initialDueDate = item.metadata.dueDate || "";
     const currentDueDate = dueDate ? format(dueDate, 'yyyy-MM-dd') : "";
@@ -408,7 +525,8 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
                   color: "inherit"
                 }}
                 textareaClassName="focus:outline-none dark:text-jungle-text-light item-editor-textarea"
-                className="w-full min-h-full"
+                onKeyDown={handleKeyDown}
+                className="w-full min-h-full item-editor-container"
               />
             </div>
           )}
