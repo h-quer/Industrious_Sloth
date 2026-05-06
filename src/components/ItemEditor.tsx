@@ -57,29 +57,38 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
         if (selectionStart >= startOfLine + prefixLength) {
           e.preventDefault();
           
+          const isOrdered = /^\d+\.\s/.test(listMatch[2]);
+          const spacesToAdd = isOrdered ? 3 : 2;
+          const spacesString = ' '.repeat(spacesToAdd);
+          
           if (e.shiftKey) {
-            // Outdent: Remove up to 2 spaces from the start of the line
-            if (lineContent.startsWith('  ')) {
-              const newValue = value.substring(0, startOfLine) + lineContent.substring(2) + value.substring(endOfLine === -1 ? value.length : endOfLine);
+            // Outdent: Remove up to spacesToAdd spaces from the start of the line
+            const leadingSpacesMatch = lineContent.match(/^ +/);
+            const leadingSpaces = leadingSpacesMatch ? leadingSpacesMatch[0].length : 0;
+            const spacesToRemove = Math.min(leadingSpaces, spacesToAdd);
+            
+            if (spacesToRemove > 0) {
+              const newValue = value.substring(0, startOfLine) + lineContent.substring(spacesToRemove) + value.substring(endOfLine === -1 ? value.length : endOfLine);
               setContent(newValue);
               setTimeout(() => {
-                const newPos = Math.max(startOfLine + prefixLength - 2, selectionStart - 2);
-                textarea.setSelectionRange(newPos, selectionEnd - 2);
-              }, 0);
-            } else if (lineContent.startsWith(' ')) {
-              const newValue = value.substring(0, startOfLine) + lineContent.substring(1) + value.substring(endOfLine === -1 ? value.length : endOfLine);
-              setContent(newValue);
-              setTimeout(() => {
-                const newPos = Math.max(startOfLine + prefixLength - 1, selectionStart - 1);
-                textarea.setSelectionRange(newPos, selectionEnd - 1);
+                const newPos = Math.max(startOfLine + prefixLength - spacesToRemove, selectionStart - spacesToRemove);
+                textarea.setSelectionRange(newPos, selectionEnd - spacesToRemove);
               }, 0);
             }
           } else {
-            // Indent: Add 2 spaces at the start of the line
-            const newValue = value.substring(0, startOfLine) + '  ' + lineContent + value.substring(endOfLine === -1 ? value.length : endOfLine);
+            // Indent: Add spaces at the start of the line
+            let newLineContent = lineContent;
+            
+            // If ordered list, reset its number to 1. 
+            if (isOrdered) {
+              newLineContent = lineContent.replace(/^(\s*)\d+\.(\s.*)$/, '$11.$2');
+            }
+
+            const newValue = value.substring(0, startOfLine) + spacesString + newLineContent + value.substring(endOfLine === -1 ? value.length : endOfLine);
             setContent(newValue);
             setTimeout(() => {
-              textarea.setSelectionRange(selectionStart + 2, selectionEnd + 2);
+              const lengthDiff = spacesToAdd + (newLineContent.length - lineContent.length);
+              textarea.setSelectionRange(selectionStart + lengthDiff, selectionEnd + lengthDiff);
             }, 0);
           }
           return;
