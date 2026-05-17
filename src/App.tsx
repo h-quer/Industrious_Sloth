@@ -761,7 +761,7 @@ export default function App() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-jungle-text dark:text-jungle-text-light leading-tight">
+            <h1 className="text-3xl font-display text-jungle-text dark:text-jungle-text-light leading-tight">
               Industrious<br />Sloth
             </h1>
           </div>
@@ -1010,7 +1010,7 @@ export default function App() {
               <div className="p-6 border-b border-jungle-border dark:border-jungle-border-dark flex items-center justify-between bg-jungle-paper dark:bg-jungle-paper-dark">
                 <h2 className="text-xl font-black text-jungle-text dark:text-jungle-text-light flex items-center gap-2">
                   <Info className="text-jungle-amber dark:text-jungle-amber-dark" size={24} />
-                  About Industrious Sloth
+                  About <span className="font-display text-2xl ml-1">Industrious Sloth</span>
                 </h2>
                 <button 
                   onClick={() => setIsAboutOpen(false)}
