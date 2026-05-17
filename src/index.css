@@ -3,6 +3,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@font-face {
+  font-family: 'Wooden Log';
+  src: url('/fonts/wooden-log.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @theme {
   /* Base Colors */
   --color-jungle-mist: #fafaf9; /* stone-50 */
@@ -41,6 +48,9 @@
   --color-jungle-amber-dark: #d97706; /* amber-600 - consistent shade */
   --color-jungle-amber-muted: #fffbeb; /* amber-50 */
   --color-jungle-amber-muted-dark: rgba(217, 119, 6, 0.2); /* amber-600/20 for consistency */
+
+  /* Fonts */
+  --font-display: "Wooden Log", cursive;
 
   /* Force dark mode to use the .dark class */
   --dark-mode: class;
