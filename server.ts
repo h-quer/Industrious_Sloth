@@ -259,25 +259,6 @@ app.put("/api/boards/:id", async (req, res) => {
   }
 });
 
-// Reorder Boards
-app.post("/api/boards/reorder", async (req, res) => {
-  const { boardIds } = req.body;
-  try {
-    const rootConfig = await fs.readJson(ROOT_CONFIG_PATH).catch(() => ({ boards: [] }));
-    const boardMap = new Map(rootConfig.boards.map((b: any) => [b.id, b]));
-    
-    const newBoards = boardIds.map((id: string) => {
-      return boardMap.get(id) || { id, icon: "mdiLeaf", color: "#059669" };
-    });
-    
-    rootConfig.boards = newBoards;
-    await fs.writeJson(ROOT_CONFIG_PATH, rootConfig);
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
-  }
-});
-
 // Create Lane
 app.post("/api/boards/:boardId/lanes", async (req, res) => {
   const { boardId } = req.params;
