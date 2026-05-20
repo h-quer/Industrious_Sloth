@@ -58,7 +58,7 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
           e.preventDefault();
           
           const isOrdered = /^\d+\.\s/.test(listMatch[2]);
-          const spacesToAdd = isOrdered ? 3 : 2;
+          const spacesToAdd = isOrdered ? 4 : 2;
           const spacesString = ' '.repeat(spacesToAdd);
           
           if (e.shiftKey) {
