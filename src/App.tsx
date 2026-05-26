@@ -766,7 +766,7 @@ export default function App() {
             </h1>
           </div>
           <button 
-            className="md:hidden p-2 text-jungle-text-muted dark:text-jungle-text-muted-dark hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded-lg"
+            className={`md:hidden p-2 text-jungle-text-muted dark:text-jungle-text-muted-dark hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded-lg transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <X size={24} />
