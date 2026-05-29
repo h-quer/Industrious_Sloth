@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "motion/react";
-import { X, Tag, Calendar, Save, Trash2, Move, Bold, Italic, Heading, List, CheckSquare, Link, Code } from "lucide-react";
+import { X, Tag, Calendar, Save, Trash2, Move, Bold, Italic, Strikethrough, Heading, List, ListOrdered, CheckSquare, Quote, Link, Image, Code, Terminal, Table, Minus } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -23,6 +23,94 @@ interface ItemEditorProps {
   onMove: (itemId: string, targetBoardId: string, targetLaneId: string) => void;
   allTags: string[];
 }
+
+const recountOrderedListsWithCursor = (
+  text: string, 
+  selStart: number, 
+  selEnd: number
+): { text: string; selStart: number; selEnd: number } => {
+  const lines = text.split('\n');
+  let counters: { [key: number]: number } = {};
+  let currentOrigPos = 0;
+  let adjustStart = 0;
+  let adjustEnd = 0;
+
+  const recountedLines = lines.map((line, index) => {
+    const lineLen = line.length;
+    const isLast = index === lines.length - 1;
+    const origStart = currentOrigPos;
+    const origEnd = origStart + lineLen + (isLast ? 0 : 1); // +1 for \n
+
+    let newLine = line;
+    const orderedMatch = line.match(/^(\s*)(\d+)\.\s(.*)$/);
+    
+    if (line.trim() === "") {
+      // Empty line, does not break anything or increment
+    } else if (orderedMatch) {
+      const indent = orderedMatch[1];
+      const rest = orderedMatch[3];
+      const I = indent.length;
+      const oldPrefix = `${indent}${orderedMatch[2]}. `;
+
+      // Clear any counters that are strictly deeper than current indent
+      Object.keys(counters).forEach((k) => {
+        const numKey = Number(k);
+        if (numKey > I) {
+          delete counters[numKey];
+        }
+      });
+
+      // Update counters
+      if (counters[I] === undefined) {
+        counters[I] = 1;
+      } else {
+        counters[I] += 1;
+      }
+
+      const newPrefix = `${indent}${counters[I]}. `;
+      newLine = `${newPrefix}${rest}`;
+
+      const change = newPrefix.length - oldPrefix.length;
+      if (change !== 0) {
+        if (selStart >= origStart + oldPrefix.length) {
+          adjustStart += change;
+        } else if (selStart > origStart) {
+          adjustStart += change;
+        }
+
+        if (selEnd >= origStart + oldPrefix.length) {
+          adjustEnd += change;
+        } else if (selEnd > origStart) {
+          adjustEnd += change;
+        }
+      }
+    } else {
+      // Check if unordered
+      const unorderedMatch = line.match(/^(\s*)([-*+](\s\[[x ]\])?\s)(.*)$/);
+      if (unorderedMatch) {
+        const indent = unorderedMatch[1];
+        const I = indent.length;
+        Object.keys(counters).forEach((k) => {
+          const numKey = Number(k);
+          if (numKey >= I) {
+            delete counters[numKey];
+          }
+        });
+      } else if (/^[^\s]/.test(line)) {
+        counters = {};
+      }
+    }
+
+    currentOrigPos = origEnd;
+    return newLine;
+  });
+
+  return {
+    text: recountedLines.join('\n'),
+    selStart: selStart + adjustStart,
+    selEnd: selEnd + adjustEnd
+  };
+};
 
 export default function ItemEditor({ item, boards, onSave, onClose, onDelete, onMove, allTags }: ItemEditorProps) {
   const [name, setName] = useState(item.name);
@@ -69,11 +157,21 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
             
             if (spacesToRemove > 0) {
               const newValue = value.substring(0, startOfLine) + lineContent.substring(spacesToRemove) + value.substring(endOfLine === -1 ? value.length : endOfLine);
-              setContent(newValue);
-              setTimeout(() => {
-                const newPos = Math.max(startOfLine + prefixLength - spacesToRemove, selectionStart - spacesToRemove);
-                textarea.setSelectionRange(newPos, selectionEnd - spacesToRemove);
-              }, 0);
+              if (isOrdered) {
+                const tempSelStart = Math.max(startOfLine + prefixLength - spacesToRemove, selectionStart - spacesToRemove);
+                const tempSelEnd = selectionEnd - spacesToRemove;
+                const recounted = recountOrderedListsWithCursor(newValue, tempSelStart, tempSelEnd);
+                setContent(recounted.text);
+                setTimeout(() => {
+                  textarea.setSelectionRange(recounted.selStart, recounted.selEnd);
+                }, 0);
+              } else {
+                setContent(newValue);
+                setTimeout(() => {
+                  const newPos = Math.max(startOfLine + prefixLength - spacesToRemove, selectionStart - spacesToRemove);
+                  textarea.setSelectionRange(newPos, selectionEnd - spacesToRemove);
+                }, 0);
+              }
             }
           } else {
             // Indent: Add spaces at the start of the line
@@ -85,11 +183,22 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
             }
 
             const newValue = value.substring(0, startOfLine) + spacesString + newLineContent + value.substring(endOfLine === -1 ? value.length : endOfLine);
-            setContent(newValue);
-            setTimeout(() => {
+            if (isOrdered) {
               const lengthDiff = spacesToAdd + (newLineContent.length - lineContent.length);
-              textarea.setSelectionRange(selectionStart + lengthDiff, selectionEnd + lengthDiff);
-            }, 0);
+              const tempSelStart = selectionStart + lengthDiff;
+              const tempSelEnd = selectionEnd + lengthDiff;
+              const recounted = recountOrderedListsWithCursor(newValue, tempSelStart, tempSelEnd);
+              setContent(recounted.text);
+              setTimeout(() => {
+                textarea.setSelectionRange(recounted.selStart, recounted.selEnd);
+              }, 0);
+            } else {
+              setContent(newValue);
+              setTimeout(() => {
+                const lengthDiff = spacesToAdd + (newLineContent.length - lineContent.length);
+                textarea.setSelectionRange(selectionStart + lengthDiff, selectionEnd + lengthDiff);
+              }, 0);
+            }
           }
           return;
         }
@@ -139,12 +248,20 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
 
         const fullPrefix = indent + nextMarker;
         const newValue = value.substring(0, selectionStart) + '\n' + fullPrefix + value.substring(selectionStart);
-        setContent(newValue);
-        
-        setTimeout(() => {
-          const newPos = selectionStart + 1 + fullPrefix.length;
-          textarea.setSelectionRange(newPos, newPos);
-        }, 0);
+        if (orderedMatch) {
+          const tempSelStart = selectionStart + 1 + fullPrefix.length;
+          const recounted = recountOrderedListsWithCursor(newValue, tempSelStart, tempSelStart);
+          setContent(recounted.text);
+          setTimeout(() => {
+            textarea.setSelectionRange(recounted.selStart, recounted.selEnd);
+          }, 0);
+        } else {
+          setContent(newValue);
+          setTimeout(() => {
+            const newPos = selectionStart + 1 + fullPrefix.length;
+            textarea.setSelectionRange(newPos, newPos);
+          }, 0);
+        }
       } else {
         // Simple auto-indentation if no list marker but line starts with spaces
         const indentMatch = currentLine.match(/^(\s+)/);
@@ -476,12 +593,15 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
           </div>
 
           {!isPreview && (
-            <div className="flex flex-wrap items-center gap-1 p-2 md:px-4 md:border-l border-jungle-border dark:border-jungle-border-dark w-full md:w-auto overflow-x-auto">
+            <div className="flex flex-wrap items-center gap-1 p-2 md:px-4 md:border-l border-jungle-border dark:border-jungle-border-dark w-full md:w-auto overflow-x-auto custom-scrollbar">
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("**", "**")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Bold">
                 <Bold size={16} />
               </button>
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("*", "*")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Italic">
                 <Italic size={16} />
+              </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("~~", "~~")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Strikethrough">
+                <Strikethrough size={16} />
               </button>
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("# ")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Heading">
                 <Heading size={16} />
@@ -490,15 +610,34 @@ export default function ItemEditor({ item, boards, onSave, onClose, onDelete, on
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("- ")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Bullet List">
                 <List size={16} />
               </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("1. ")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Ordered List">
+                <ListOrdered size={16} />
+              </button>
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("- [ ] ")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Task List">
                 <CheckSquare size={16} />
+              </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("> ")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Blockquote">
+                <Quote size={16} />
               </button>
               <div className="w-px h-4 bg-jungle-border dark:bg-jungle-border-dark mx-1" />
               <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("[", "](url)")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Link">
                 <Link size={16} />
               </button>
-              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("`", "`")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Code">
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("![Alt text](", ")")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Image">
+                <Image size={16} />
+              </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("`", "`")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Inline Code">
                 <Code size={16} />
+              </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("```markdown\n", "\n```")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Code Block">
+                <Terminal size={16} />
+              </button>
+              <div className="w-px h-4 bg-jungle-border dark:bg-jungle-border-dark mx-1" />
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("\n| Header 1 | Header 2 |\n| -------- | -------- |\n| Cell 1   | Cell 2   |\n")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Table">
+                <Table size={16} />
+              </button>
+              <button onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat("\n---\n")} className="p-1.5 hover:bg-jungle-sidebar-active dark:hover:bg-jungle-sidebar-active-dark rounded text-jungle-text-muted dark:text-jungle-text-muted-dark transition-colors" title="Horizontal Rule">
+                <Minus size={16} />
               </button>
             </div>
           )}
